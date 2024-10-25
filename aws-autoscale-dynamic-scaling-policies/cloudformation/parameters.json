@@ -1,0 +1,22 @@
+[
+  {
+    "ParameterKey": "AMI",
+    "ParameterValue": "ami-xxxxxxxxxxx"
+  },
+  {
+    "ParameterKey": "InstanceProfile",
+    "ParameterValue": "arn:aws:iam::112312312312:instance-profile/your-instance-profile"
+  },
+  {
+    "ParameterKey": "InstanceType",
+    "ParameterValue": "t3a.micro"
+  },
+  {
+    "ParameterKey": "SubnetsId",
+    "ParameterValue": "subnet-xxxxx, subnet-xxxx"
+  },
+  {
+    "ParameterKey": "AvailabilityZones",
+    "ParameterValue": "us-east-1a, us-east-1b"
+  }
+]

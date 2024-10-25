@@ -1,85 +1,107 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  AMI:
+    Type: String
+  InstanceProfile:
+    Type: String
+  InstanceType:
+    Type: String
+  SubnetsId:
+    Type: CommaDelimitedList
+  AvailabilityZones:
+    Type: CommaDelimitedList
 Resources:
-  LaunchTemplateStep:
+  LaunchTemplateSimple:
     Type: AWS::EC2::LaunchTemplate
     Properties:
       LaunchTemplateData:
         IamInstanceProfile:
-          Arn: arn:aws:iam::133171059739:instance-profile/role_infra_dev_cloudops
-        ImageId: ami-06b21ccaeff8cd686
+          Arn: !Ref InstanceProfile
+        ImageId: !Ref AMI
         InstanceMarketOptions:
           MarketType: spot
-        InstanceType: t3a.small
-        TagSpecifications:  # Move TagSpecifications inside LaunchTemplateData
-          - ResourceType: "instance"  # Correct ResourceType
+        InstanceType: !Ref InstanceType
+        CreditSpecification:
+          CpuCredits: standard
+        TagSpecifications:
+          - ResourceType: "instance"
             Tags:
               - Key: "Name"
-                Value: "Ec2Step"
-              - Key: "CostCategory"
-                Value: "INFRA - DEV"
-              - Key: "RunType"
-                Value: "On Demand"
-              - Key: "AccountingCategory"
-                Value: "Infrastructure"
+                Value: "Ec2AutoScalingDemo"
       VersionDescription: "Init Version"
 
-  AutoscalingGroupStep:
+  AutoscalingGroupSimple:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      AutoScalingGroupName: ASG-Step
+      AutoScalingGroupName: ASG-Simple
       AvailabilityZones:
-        - us-east-1a
-        - us-east-1b
+        - !Select [ 0, !Ref AvailabilityZones ]
+        - !Select [ 1, !Ref AvailabilityZones ]
       CapacityRebalance: True
+      Cooldown: 300
       DefaultInstanceWarmup: 300
       DesiredCapacity: 1
       HealthCheckGracePeriod: 300
       HealthCheckType: EC2
       LaunchTemplate:
-        LaunchTemplateId: !Ref LaunchTemplateStep
-        Version: 1
-      MaxSize: 4
+        LaunchTemplateId: !Ref LaunchTemplateSimple
+        Version: !GetAtt LaunchTemplateSimple.LatestVersion
+      MaxSize: 2
       MinSize: 1
       VPCZoneIdentifier:
-        - subnet-0e33d32ee28a04189
-        - subnet-09c3a829407d43097
+        - !Select [0, !Ref SubnetsId]
+        - !Select [1, !Ref SubnetsId]
 
-  AutoScalingPolicyStep:
-    Type: AWS::AutoScaling::ScalingPolicy
-    Properties:
-      AdjustmentType: ExactCapacity
-      AutoScalingGroupName: !Ref AutoscalingGroupStep  # Reference the AutoscalingGroup
-      MetricAggregationType: Average
-      PolicyType: StepScaling
-      StepAdjustments:
-        - MetricIntervalLowerBound: '0'
-          MetricIntervalUpperBound: '20'
-          ScalingAdjustment: '2'
-        - MetricIntervalLowerBound: '20'
-          MetricIntervalUpperBound: '40'
-          ScalingAdjustment: '3'
-        - MetricIntervalLowerBound: '40'
-          ScalingAdjustment: '4'
-
-
-
-  AverageAutoscaleCPUAlarm:
+  AutoscaleCPUAlarmScaleOut:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmName: "StepScaling-AverageCPUAlarm"
-      AlarmDescription: "Alarm when CPU exceeds 10%"
+      AlarmName: "SimpleScaling-CPUAlarmScaleOut"
+      AlarmDescription: "Alarm when CPU exceeds 50%"
       Namespace: "AWS/EC2"
       MetricName: "CPUUtilization"
       Dimensions:
         - Name: "AutoScalingGroupName"
-          Value: !Ref AutoscalingGroupStep
+          Value: !Ref AutoscalingGroupSimple
       Statistic: "Average"
       Period: 300
       EvaluationPeriods: 3
       Threshold: 50
       ComparisonOperator: "GreaterThanThreshold"
       AlarmActions:
-        - !Ref AutoScalingPolicyStep
-      OKActions:
-        - !Ref AutoScalingPolicyStep
+        - !Ref AutoScalingPolicyScaleOut
       TreatMissingData: "notBreaching"
+
+  AutoscaleCPUAlarmScaleIn:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: "SimpleScaling-CPUAlarmScaleIn"
+      AlarmDescription: "Alarm when CPU below 50%"
+      Namespace: "AWS/EC2"
+      MetricName: "CPUUtilization"
+      Dimensions:
+        - Name: "AutoScalingGroupName"
+          Value: !Ref AutoscalingGroupSimple
+      Statistic: "Average"
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 50
+      ComparisonOperator: "LessThanThreshold"
+      AlarmActions:
+        - !Ref AutoScalingPolicyScaleIn
+      TreatMissingData: "notBreaching"
+
+  AutoScalingPolicyScaleOut:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ExactCapacity
+      AutoScalingGroupName: !Ref AutoscalingGroupSimple
+      PolicyType: SimpleScaling
+      ScalingAdjustment: '2'
+
+  AutoScalingPolicyScaleIn:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ExactCapacity
+      AutoScalingGroupName: !Ref AutoscalingGroupSimple
+      PolicyType: SimpleScaling
+      ScalingAdjustment: '1'

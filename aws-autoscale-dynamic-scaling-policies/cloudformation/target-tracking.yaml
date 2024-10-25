@@ -21,17 +21,13 @@ Resources:
         InstanceMarketOptions:
           MarketType: spot
         InstanceType: !Ref InstanceType
+        CreditSpecification:
+          CpuCredits: standard
         TagSpecifications:
           - ResourceType: "instance"
             Tags:
               - Key: "Name"
-                Value: "Ec2TargetTacking"
-              - Key: "CostCategory"
-                Value: "INFRA - DEV"
-              - Key: "RunType"
-                Value: "On Demand"
-              - Key: "AccountingCategory"
-                Value: "Infrastructure"
+                Value: "Ec2AutoScalingDemo"
       VersionDescription: "Init Version"
 
   AutoscalingGroupTargetTracking:
@@ -48,7 +44,7 @@ Resources:
       HealthCheckType: EC2
       LaunchTemplate:
         LaunchTemplateId: !Ref LaunchTemplateTargetTracking
-        Version: 1
+        Version: !GetAtt LaunchTemplateTargetTracking.LatestVersion
       MaxSize: 3
       MinSize: 1
       VPCZoneIdentifier:
@@ -64,4 +60,4 @@ Resources:
         DisableScaleIn: False
         PredefinedMetricSpecification:
           PredefinedMetricType: ASGAverageCPUUtilization
-        TargetValue: 10
+        TargetValue: 50

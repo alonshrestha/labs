@@ -1,56 +1,91 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  AMI:
+    Type: String
+  InstanceProfile:
+    Type: String
+  InstanceType:
+    Type: String
+  SubnetsId:
+    Type: CommaDelimitedList
+  AvailabilityZones:
+    Type: CommaDelimitedList
 Resources:
-  LaunchTemplateTargetTracking:
+  LaunchTemplateStep:
     Type: AWS::EC2::LaunchTemplate
     Properties:
       LaunchTemplateData:
         IamInstanceProfile:
-          Arn: arn:aws:iam::133171059739:instance-profile/role_infra_dev_cloudops
-        ImageId: ami-06b21ccaeff8cd686
+          Arn: !Ref InstanceProfile
+        ImageId: !Ref AMI
         InstanceMarketOptions:
           MarketType: spot
-        InstanceType: t3a.small
-        TagSpecifications:  # Move TagSpecifications inside LaunchTemplateData
-          - ResourceType: "instance"  # Correct ResourceType
+        InstanceType: !Ref InstanceType
+        CreditSpecification:
+          CpuCredits: standard
+        TagSpecifications:
+          - ResourceType: "instance"
             Tags:
               - Key: "Name"
-                Value: "Ec2TargetTacking"
-              - Key: "CostCategory"
-                Value: "INFRA - DEV"
-              - Key: "RunType"
-                Value: "On Demand"
-              - Key: "AccountingCategory"
-                Value: "Infrastructure"
+                Value: "Ec2AutoScalingDemo"
       VersionDescription: "Init Version"
 
-  AutoscalingGroupTargetTracking:
+  AutoscalingGroupStep:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      AutoScalingGroupName: ASG-TargetTracking
+      AutoScalingGroupName: ASG-Step
       AvailabilityZones:
-        - us-east-1a
-        - us-east-1b
+        - !Select [ 0, !Ref AvailabilityZones ]
+        - !Select [ 1, !Ref AvailabilityZones ]
       CapacityRebalance: True
+      Cooldown: 300
       DefaultInstanceWarmup: 300
       DesiredCapacity: 1
       HealthCheckGracePeriod: 300
       HealthCheckType: EC2
       LaunchTemplate:
-        LaunchTemplateId: !Ref LaunchTemplateTargetTracking
-        Version: 1
-      MaxSize: 3
+        LaunchTemplateId: !Ref LaunchTemplateStep
+        Version: !GetAtt LaunchTemplateStep.LatestVersion
+      MaxSize: 4
       MinSize: 1
       VPCZoneIdentifier:
-        - subnet-0e33d32ee28a04189
-        - subnet-09c3a829407d43097
+        - !Select [0, !Ref SubnetsId]
+        - !Select [1, !Ref SubnetsId]
 
-  AutoScalingPolicyTargetTracking:
+  AverageAutoscaleCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: "StepScaling-AverageCPUAlarm"
+      AlarmDescription: "Alarm AvgCPUUtilization"
+      Namespace: "AWS/EC2"
+      MetricName: "CPUUtilization"
+      Dimensions:
+        - Name: "AutoScalingGroupName"
+          Value: !Ref AutoscalingGroupStep
+      Statistic: "Average"
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 25
+      ComparisonOperator: "GreaterThanThreshold"
+      AlarmActions:
+        - !Ref AutoScalingPolicyStep
+      OKActions:
+        - !Ref AutoScalingPolicyStep
+      TreatMissingData: "notBreaching"
+
+  AutoScalingPolicyStep:
     Type: AWS::AutoScaling::ScalingPolicy
     Properties:
-      AutoScalingGroupName: !Ref AutoscalingGroupTargetTracking  # Reference the AutoscalingGroup
-      PolicyType: TargetTrackingScaling
-      TargetTrackingConfiguration:
-        DisableScaleIn: True
-        PredefinedMetricSpecification:
-          PredefinedMetricType: ASGAverageCPUUtilization
-        TargetValue: 10
+      AdjustmentType: ExactCapacity
+      AutoScalingGroupName: !Ref AutoscalingGroupStep
+      MetricAggregationType: Average
+      PolicyType: StepScaling
+      StepAdjustments:
+        - MetricIntervalLowerBound: '0'
+          MetricIntervalUpperBound: '20'
+          ScalingAdjustment: '2'
+        - MetricIntervalLowerBound: '20'
+          MetricIntervalUpperBound: '40'
+          ScalingAdjustment: '3'
+        - MetricIntervalLowerBound: '40'
+          ScalingAdjustment: '4'
