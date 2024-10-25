@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  LaunchTemplateTargetTracking:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        IamInstanceProfile:
+          Arn: arn:aws:iam::133171059739:instance-profile/role_infra_dev_cloudops
+        ImageId: ami-06b21ccaeff8cd686
+        InstanceMarketOptions:
+          MarketType: spot
+        InstanceType: t3a.small
+        TagSpecifications:  # Move TagSpecifications inside LaunchTemplateData
+          - ResourceType: "instance"  # Correct ResourceType
+            Tags:
+              - Key: "Name"
+                Value: "Ec2TargetTacking"
+              - Key: "CostCategory"
+                Value: "INFRA - DEV"
+              - Key: "RunType"
+                Value: "On Demand"
+              - Key: "AccountingCategory"
+                Value: "Infrastructure"
+      VersionDescription: "Init Version"
+
+  AutoscalingGroupTargetTracking:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: ASG-TargetTracking
+      AvailabilityZones:
+        - us-east-1a
+        - us-east-1b
+      CapacityRebalance: True
+      DefaultInstanceWarmup: 300
+      DesiredCapacity: 1
+      HealthCheckGracePeriod: 300
+      HealthCheckType: EC2
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplateTargetTracking
+        Version: 1
+      MaxSize: 3
+      MinSize: 1
+      VPCZoneIdentifier:
+        - subnet-0e33d32ee28a04189
+        - subnet-09c3a829407d43097
+
+  AutoScalingPolicyTargetTracking:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref AutoscalingGroupTargetTracking  # Reference the AutoscalingGroup
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        DisableScaleIn: True
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: 10

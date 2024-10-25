@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  AMI:
+    Type: String
+  InstanceProfile:
+    Type: String
+  InstanceType:
+    Type: String
+  SubnetsId:
+    Type: CommaDelimitedList
+  AvailabilityZones:
+    Type: CommaDelimitedList
+Resources:
+  LaunchTemplateTargetTracking:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        IamInstanceProfile:
+          Arn: !Ref InstanceProfile
+        ImageId: !Ref AMI
+        InstanceMarketOptions:
+          MarketType: spot
+        InstanceType: !Ref InstanceType
+        TagSpecifications:
+          - ResourceType: "instance"
+            Tags:
+              - Key: "Name"
+                Value: "Ec2TargetTacking"
+              - Key: "CostCategory"
+                Value: "INFRA - DEV"
+              - Key: "RunType"
+                Value: "On Demand"
+              - Key: "AccountingCategory"
+                Value: "Infrastructure"
+      VersionDescription: "Init Version"
+
+  AutoscalingGroupTargetTracking:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: ASG-TargetTracking
+      AvailabilityZones:
+        - !Select [ 0, !Ref AvailabilityZones ]
+        - !Select [ 1, !Ref AvailabilityZones ]
+      CapacityRebalance: True
+      DefaultInstanceWarmup: 300
+      DesiredCapacity: 1
+      HealthCheckGracePeriod: 300
+      HealthCheckType: EC2
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplateTargetTracking
+        Version: 1
+      MaxSize: 3
+      MinSize: 1
+      VPCZoneIdentifier:
+        - !Select [ 0, !Ref SubnetsId ]
+        - !Select [ 1, !Ref SubnetsId ]
+
+  AutoScalingPolicyTargetTracking:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref AutoscalingGroupTargetTracking
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        DisableScaleIn: False
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: 10
