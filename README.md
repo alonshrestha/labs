@@ -1,10 +1,9 @@
-# Lab Code Repository
+# Welcome to My ☁️ Cloud Playground 🚀
 
-Welcome to my Lab code repository! Here, you'll find all the code for my lab projects, organized by individual directories. Each project includes its own README file with detailed instructions, setup steps, and explanations of the implemented concepts.
-
+Here, you'll find a variety of my lab projects, ranging from small experiments to large-scale solutions. You can explore these projects in the playground directory or through the list below. Many of the projects are linked from my external source, as they were developed before this repository was created.
 ## Projects List
 
-- **[AWS EC2 Dynamic Scaling Policies](aws-autoscale-dynamic-scaling-policies/)**
+- **[AWS EC2 Dynamic Scaling Policies](src/aws-autoscale-dynamic-scaling-policies/)**
   - Learn about simple, step, and target-tracking scaling policies, their use cases, and setup strategies. Ideal for managing aws autoscaling group.
 
 Feel free to explore the directories!
