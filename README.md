@@ -7,7 +7,7 @@ Enjoy exploring!
 ## 🚀 Projects:
 - **[AWS EC2 Patching Automation Using Lambda, SSM, Python](https://github.com/alonshrestha/aws-ec2-patch-automation-boto3)** [Security]
   - This application provides a flexible patching automation script designed to patch AWS EC2 instances using AWS Systems Manager. 
-- **[Securely Share AMI Across AWS Account Using Python](playground/share-aws-ami-cross-account)** [AWS:Compute]
+- **[Securely Share AMI Across AWS Account Using Python](playground/share-aws-ami-cross-account)** [AWS Compute]
   - Securely share your AMI across AWS accounts, along with an automated solution built using Python.
 
 ## 🧪 Research and Experiments:
