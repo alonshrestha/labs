@@ -6,14 +6,14 @@ Enjoy exploring!
 
 ## 🚀 Projects:
 - **[AWS EC2 Patching Automation Using Lambda, SSM, Python](https://github.com/alonshrestha/aws-ec2-patch-automation-boto3)** [Security]
-  - This application provides a flexible patching automation script designed to patch AWS EC2 instances using AWS Systems Manager. The script is capable of patching multiple AWS accounts and allows for organized patching of instances in various environments, such as DEV, QC, UAT, and PROD.
+  - This application provides a flexible patching automation script designed to patch AWS EC2 instances using AWS Systems Manager. 
 - **[Securely Share AMI Across AWS Account Using Python](playground/share-aws-ami-cross-account)** [AWS:Compute]
   - Securely share your AMI across AWS accounts, along with an automated solution built using Python.
 
 ## 🧪 Research and Experiments:
 
 - **[Choosing Right AWS EC2 Dynamic Scaling Policies](playground/aws-autoscale-dynamic-scaling-policies/)** [AWS Compute]
-  - Learn about simple, step, and target-tracking scaling policies, their use cases, and setup strategies. Ideal for managing aws autoscaling group.
+  - An analysis of Simple, Step, and Target-Tracking scaling policies, including their use cases, setup strategies, and guidance on choosing the ideal policy for managing an AWS Auto Scaling group.
 
 
 ## License
