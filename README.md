@@ -32,10 +32,10 @@ Enjoy exploring!
 - **[Linux Boot Process in AWS EC2 Instance](https://cloudwith.alon.com.np/blogs/linux-boot-process-aws-ec2-instance/)** [Linux]
   - Walk through the basic steps of the Linux boot process on an AWS EC2 instance to provide a clear understanding of how it works.  
 
-- **[Understanding AWS Data Transfer Cost](https://cloudwith.alon.com.np/blogs/linux-boot-process-aws-ec2-instance/)** [AWS Cost Optimization]
+- **[Understanding AWS Data Transfer Cost](https://cloudwith.alon.com.np/blogs/understand-optimize-aws-data-transfer-cost/)** [AWS Cost Optimization]
   - Details on AWS data transfer costs, covering billing principles, cost-saving strategies, and ways to reduce expenses for data transfers within, into, and out of AWS.    
 
-- **[Scanning Vulnerabilities on EC2 Instance Using AWS Inspector](https://cloudwith.alon.com.np/blogs/linux-boot-process-aws-ec2-instance/)** [AWS Security]
+- **[Scanning Vulnerabilities on EC2 Instance Using AWS Inspector](https://cloudwith.alon.com.np/blogs/scanning-aws-ec2-with-inspector/)** [AWS Security]
   - Experimenting with AWS Inspector for scanning vulnerabilities on EC2 instances. Includes information about setup, scanning methods, vulnerability details, and cost optimization strategies.
 
 - **[Choosing Right AWS EC2 Dynamic Scaling Policies](playground/aws-autoscale-dynamic-scaling-policies/)** [AWS Compute]
