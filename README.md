@@ -35,6 +35,9 @@ Enjoy exploring!
 - **[Understanding AWS Data Transfer Cost](https://cloudwith.alon.com.np/blogs/understand-optimize-aws-data-transfer-cost/)** [AWS Cost Optimization]
   - Details on AWS data transfer costs, covering billing principles, cost-saving strategies, and ways to reduce expenses for data transfers within, into, and out of AWS.    
 
+- **[AWS Cross-Account Access with AWS STS Assume Role](https://cloudwith.alon.com.np/blogs/aws-cross-account-access-sts-assume-role/)** [AWS Cost Optimization]
+  - Learn how to use AWS STS AssumeRole to securely access resources in a cross-account setup for automation running from your master account.
+
 - **[Scanning Vulnerabilities on EC2 Instance Using AWS Inspector](https://cloudwith.alon.com.np/blogs/scanning-aws-ec2-with-inspector/)** [AWS Security]
   - Experimenting with AWS Inspector for scanning vulnerabilities on EC2 instances. Includes information about setup, scanning methods, vulnerability details, and cost optimization strategies.
 
