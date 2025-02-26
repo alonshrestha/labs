@@ -29,6 +29,9 @@ Enjoy exploring!
 
 ## 🧪 Research and Experiments:
 
+- **[Implementing AWS Network Firewall](https://cloudwith.alon.com.np/blogs/implementing-aws-network-firewall/)** [AWS Security]
+  - This research focuses on implementing AWS Network Firewall to resolve scalability issues in securing EC2 instances. The existing architecture faced limitations with AWS Security Groups, which couldn't handle growing IP whitelisting needs. AWS Network Firewall was deployed as a scalable solution to manage traffic and enhance security, addressing these constraints effectively.
+
 - **[Linux Boot Process in AWS EC2 Instance](https://cloudwith.alon.com.np/blogs/linux-boot-process-aws-ec2-instance/)** [Linux]
   - Walk through the basic steps of the Linux boot process on an AWS EC2 instance to provide a clear understanding of how it works.  
 
