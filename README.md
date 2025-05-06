@@ -29,22 +29,22 @@ Enjoy exploring!
 
 ## 🧪 Research and Experiments:
 
-- **[Implementing AWS Network Firewall](https://cloudwith.alon.com.np/blogs/implementing-aws-network-firewall/)** [AWS Security]
+- **[Implementing AWS Network Firewall](https://cloudwith.alon.com.np/implementing-aws-network-firewall)** [AWS Security]
   - This research focuses on implementing AWS Network Firewall to resolve scalability issues in securing EC2 instances. The existing architecture faced limitations with AWS Security Groups, which couldn't handle growing IP whitelisting needs. AWS Network Firewall was deployed as a scalable solution to manage traffic and enhance security, addressing these constraints effectively.
 
-- **[Linux Boot Process in AWS EC2 Instance](https://cloudwith.alon.com.np/blogs/linux-boot-process-aws-ec2-instance/)** [Linux]
+- **[Linux Boot Process in AWS EC2 Instance](https://cloudwith.alon.com.np/how-linux-boots-on-aws-ec2-instance)** [Linux]
   - Walk through the basic steps of the Linux boot process on an AWS EC2 instance to provide a clear understanding of how it works.  
 
-- **[Understanding AWS Data Transfer Cost](https://cloudwith.alon.com.np/blogs/understand-optimize-aws-data-transfer-cost/)** [AWS Cost Optimization]
+- **[Understanding AWS Data Transfer Cost](https://cloudwith.alon.com.np/understanding-aws-data-transfer-costs)** [AWS Cost Optimization]
   - Details on AWS data transfer costs, covering billing principles, cost-saving strategies, and ways to reduce expenses for data transfers within, into, and out of AWS.    
 
-- **[AWS Cross-Account Access with AWS STS Assume Role](https://cloudwith.alon.com.np/blogs/aws-cross-account-access-sts-assume-role/)** [AWS Cost Optimization]
+- **[AWS Cross-Account Access with AWS STS Assume Role](https://cloudwith.alon.com.np/automate-cross-account-access-using-sts-assume-role)** [AWS Cost Optimization]
   - Learn how to use AWS STS AssumeRole to securely access resources in a cross-account setup for automation running from your master account.
 
-- **[Scanning Vulnerabilities on EC2 Instance Using AWS Inspector](https://cloudwith.alon.com.np/blogs/scanning-aws-ec2-with-inspector/)** [AWS Security]
+- **[Scanning Vulnerabilities on EC2 Instance Using AWS Inspector](https://cloudwith.alon.com.np/scanning-vulnerabilities-on-ec2-instance-using-aws-inspector)** [AWS Security]
   - Experimenting with AWS Inspector for scanning vulnerabilities on EC2 instances. Includes information about setup, scanning methods, vulnerability details, and cost optimization strategies.
 
-- **[Choosing Right AWS EC2 Dynamic Scaling Policies](playground/aws-autoscale-dynamic-scaling-policies/)** [AWS Compute]
+- **[Choosing Right AWS EC2 Dynamic Scaling Policies](https://cloudwith.alon.com.np/choosing-right-aws-ec2-dynamic-autoscaling-policies)** [AWS Compute]
   - An analysis of Simple, Step, and Target-Tracking scaling policies, including their use cases, setup strategies, and guidance on choosing the ideal policy for managing an AWS Auto Scaling group.
 
 ## License
